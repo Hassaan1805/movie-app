@@ -5,6 +5,19 @@
   text-align: center;
 }
 
+/* Global body styling for custom dark background */
+body {
+  background-color: #1E1E1E;
+  margin: 0;
+  padding: 0;
+  color: white;
+}
+
+#root {
+  background-color: #1E1E1E;
+  color: white;
+}
+
 /* DarkVeil Background Styles */
 .dark-veil-container {
   position: fixed;

@@ -1,7 +1,8 @@
 import React, {useEffect, useState } from 'react'
-import Search from './Components/Search';
+import Navbar from './Components/Navbar';
 import Loader from './Components/Loader';
 import MovieCard from './Components/movieCard';
+import Footer from './Components/Footer';
 //adding api url which will help us fetch the data along with , the path to our api key
 const API_BASE_URL = 'https://api.themoviedb.org/3/' 
 const API_KEY = import.meta.env.VITE_TMDB_API_KEY;
@@ -29,7 +30,7 @@ const App = () => {
   
   //reduces load on the api calls and prevents it from overloading
   //provide search result after 500ms rather then every character which is typed 
-  useDebounce(() => setDebouncedSearchTerm(searchState),500,[searchState])
+  useDebounce(() => setDebouncedSearchTerm(searchState),250,[searchState])
 
 
    const fetchMovies = async ( query = '') =>{
@@ -94,37 +95,57 @@ const App = () => {
 
 return(
     
-<main className="m-0 p-0 ">
+<main className="m-0 p-0">
+  
+  {/* Navbar */}
+  <Navbar searchState={searchState} setSearchState={setSearchState} />
     
   <div className="pattern"/> 
-  <div className="wrapper pt-0">
-    <header className="mt-0 pt-0">
-
-      <img src='./hero-img.png'  alt='heroBanner'/>
-      <h1>
+  <div className="wrapper pt-4">
+    <header className="mt-2 pt-2 text-center">
+      <img src='./hero-img.png' alt='heroBanner' className="mx-auto mb-4"/>
+      <h1 className="text-4xl md:text-6xl font-bold mb-6">
         Find a good <span className='text-gradient'>Watch</span> without any nuisance
       </h1>
-    <Search searchState={searchState} setSearchState={setSearchState}/>
     </header>
     {trendingMovies.length> 0 && (
-      <section className='trending '>
-        <h2>
+      <section id="trending" className='trending mb-12'>
+        <h2 className="text-3xl font-bold text-white mb-12 ">
           Trending Movies
         </h2>
-        <ul>
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
           {trendingMovies.map((movie,index) => (
-            <li key={movie.$id}>
-              <p>
-                {index + 1}
-              </p>
-              <img src={movie.poster_url} alt/>
-            </li>
+            <div key={movie.$id} className="group relative">
+              <div className="relative overflow-hidden rounded-xl bg-gradient-to-br from-purple-900/20 to-blue-900/20 backdrop-blur-sm border border-purple-500/30 hover:border-purple-400/60 transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:shadow-purple-500/20">
+                {/* Ranking Badge */}
+                <div className="absolute top-3 left-3 z-10 w-8 h-8 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-full flex items-center justify-center text-black font-bold text-sm shadow-lg">
+                  {index + 1}
+                </div>
+                
+                {/* Movie Poster */}
+                <img 
+                  src={movie.poster_url} 
+                  alt={movie.title}
+                  className="w-full h-64 object-cover group-hover:scale-110 transition-transform duration-500"
+                />
+                
+                {/* Overlay */}
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                
+                {/* Movie Title Overlay */}
+                <div className="absolute bottom-0 left-0 right-0 p-4 transform translate-y-full group-hover:translate-y-0 transition-transform duration-300">
+                  <h3 className="text-white font-semibold text-sm line-clamp-2 drop-shadow-lg">
+                    {movie.title}
+                  </h3>
+                </div>
+              </div>
+            </div>
           ))}
-        </ul>
+        </div>
       </section>
     )}
     
-    <section className='All Movies'>
+    <section id="movies" className='All Movies'>
     <h2 >
       All Movies 
     </h2> 
@@ -146,6 +167,9 @@ return(
 
 
   </div>
+  
+  {/* Footer */}
+  <Footer />
 
 </main>  
 
